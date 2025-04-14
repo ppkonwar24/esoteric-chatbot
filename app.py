@@ -1,5 +1,6 @@
 from flask import Flask, request
 from chatbot_logic import handle_message
+import os
 
 app = Flask(__name__)
 
@@ -14,8 +15,6 @@ def webhook():
 @app.route('/')
 def home():
     return "Esoteric Chatbot is running."
-
-import os
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
