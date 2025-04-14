@@ -6,11 +6,23 @@ app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    data = request.get_json()
-    user_message = data.get('message', '')
-    user_id = data.get('sender_id', '')
-    reply = handle_message(user_id, user_message)
-    return {'reply': reply}, 200
+    try:
+        data = request.get_json()
+        print("📩 Received webhook payload:", data)
+
+        user_message = data.get('message', '')
+        user_id = data.get('sender_id', '')
+
+        if not user_message:
+            return {'error': 'Message is required'}, 400
+
+        reply = handle_message(user_id, user_message)
+        print("💬 Generated reply:", reply)
+
+        return {'reply': reply}, 200
+    except Exception as e:
+        print("❌ Error occurred:", str(e))
+        return {'error': str(e)}, 500
 
 @app.route('/')
 def home():
